@@ -1,28 +1,29 @@
 package main
 
 import (
-    "fmt"
-    "os"
-    "os/signal"
-    "syscall"
-    "time" // or "runtime"
+	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
+	"time" // or "runtime"
 )
 
 func cleanup() {
-    fmt.Println("cleanup")
+	fmt.Println("")
+	fmt.Println("Cleanup!")
 }
 
 func main() {
-    c := make(chan os.Signal, 2)
-    signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-    go func() {
-        <-c
-        cleanup()
-        os.Exit(1)
-    }()
+	c := make(chan os.Signal, 2)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		cleanup()
+		os.Exit(0)
+	}()
 
-    for {
-        fmt.Println("sleeping...")
-        time.Sleep(10 * time.Second) // or runtime.Gosched() or similar per @misterbee
-    }
+	for {
+		fmt.Println("Sleeping...")
+		time.Sleep(10 * time.Second) // or runtime.Gosched() or similar per @misterbee
+	}
 }
